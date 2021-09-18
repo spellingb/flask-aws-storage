@@ -23,7 +23,8 @@ def upload():
         f = request.files['file']
         f.save(os.path.join(UPLOAD_FOLDER, secure_filename(f.filename)))
         upload_file(f"uploads/{f.filename}", BUCKET)
-        return redirect("/")
+        #return redirect("/")
+        return 'file uploaded successfully'
 
 if __name__ == '__main__':
     app.run(debug=True)
