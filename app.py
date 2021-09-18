@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template, request, redirect, send_file
+from flask.helpers import url_for
 from s3_functions import list_files, upload_file, show_image
 from werkzeug.utils import secure_filename
 
@@ -21,10 +22,11 @@ def list():
 def upload():
     if request.method == "POST":
         f = request.files['file']
+        returnURL = request.headers.get('origin')
         f.save(os.path.join(UPLOAD_FOLDER, secure_filename(f.filename)))
         upload_file(f"uploads/{f.filename}", BUCKET)
         #return redirect("/")
-        return 'file uploaded successfully'
+        return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
