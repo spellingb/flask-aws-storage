@@ -1,4 +1,9 @@
 import boto3
+import re
+import uuid
+
+from array import *
+from boto3 import *
 
 def upload_file(file_name, bucket):
     object_name = file_name
