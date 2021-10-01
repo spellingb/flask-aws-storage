@@ -31,3 +31,28 @@ def show_image(bucket):
     # print("[DATA] : The contents inside show_image = ", public_urls)
     return public_urls
     
+def list_bucket():
+    bucketreturn = []
+    s3 = boto3.resource('s3')
+    pattern = '.+lab.+(img\-mgr|imgmgr).+'
+    buckets = s3.buckets.all()
+    for b in buckets:
+        if re.match(pattern, b.name):
+            bucketreturn.append(b.name)
+    return bucketreturn
+
+def filter_bucket(bucketList):
+    if bucketList == []:
+        return None
+    else:
+        try:
+            bucketList.count(0)
+            return bucketList[0]
+        except:
+            return bucketList
+
+def create_bucket():
+    s3 = boto3.resource('s3')
+    bucketuuid = str(uuid.uuid4()).split('-')[-1]
+    bucketname = 'top-lab-imgmgr-' + bucketuuid
+    s3.create_bucket(Bucket=bucketname)
