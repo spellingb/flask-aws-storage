@@ -14,6 +14,7 @@ COPY . /home/flask/app/web
 RUN chown -R flask:flaskgroup /home/flask
 
 EXPOSE 5000
+ENV BUCKET_NAME=insert_bucket_name_here
 USER flask
 ENTRYPOINT [ "python3" ]
 CMD [ "-m" , "flask", "run", "--host=0.0.0.0"]

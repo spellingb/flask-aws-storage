@@ -5,15 +5,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
-try:
-    BUCKET = os.environ['BUCKET_NAME']
-except:
-    ALLBUCKETS = list_bucket()
-    BUCKET = filter_bucket(ALLBUCKETS)
-    if BUCKET == None:
-        create_bucket()
-        BUCKET = list_bucket
-        
+BUCKET = os.getenv('BUCKET_NAME')       
 
 @app.route("/")
 def home():
