@@ -1,9 +1,13 @@
 FROM python:3.7-slim
 
-RUN groupadd flaskgroup && useradd -m -g flaskgroup -s /bin/bash flask
+RUN groupadd flaskgroup \
+    && useradd -m -g flaskgroup -s /bin/bash flask \
+    && mkdir -p /home/flask/app/web  \
+    && mkdir /home/flask/app/web/uploads \
+    && apt-get update  \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y net-tools curl \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /home/flask/app/web
-RUN mkdir /home/flask/app/web/uploads
 WORKDIR /home/flask/app/web
 
 COPY requirements.txt /home/flask/app/web
