@@ -1,0 +1,28 @@
+--- 
+phases:
+  pre_build: 
+    commands: 
+      - "echo Using AWS Account: $AWS_ACCESS_KEY_ID"
+      - aws sts get-caller-identity
+      - export IMAGE_VERSION="$(cat version)"
+      - "echo Linting Project..."
+      - docker run --rm -i hadolint/hadolint:latest hadolint -f json - < Dockerfile | jq ."
+      - "echo Logging in to ECR..."
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/n8g0q1x3"
+      - export DEPLOY_ENVIRONMENT=${CODEBUILD_GIT_BRANCH:4}"
+      - "echo Environment variables:"
+      - printenv
+  build: 
+    commands: 
+      - "echo Build started on `date`"
+      - "echo Building the Docker image..."
+      - "docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG ."
+      - "docker tag $IMAGE_REPO_NAME:$IMAGE_TAG public.ecr.aws/n8g0q1x3/$IMAGE_REPO_NAME:$IMAGE_TAG"
+      - "docker tag $IMAGE_REPO_NAME:$IMAGE_TAG public.ecr.aws/n8g0q1x3/$IMAGE_REPO_NAME:$IMAGE_VERSION"
+  post_build: 
+    commands: 
+      - "echo Build completed on `date`"
+      - "echo Pushing the Docker image..."
+      - "docker push public.ecr.aws/n8g0q1x3/$IMAGE_REPO_NAME:$IMAGE_TAG"
+      - "docker push public.ecr.aws/n8g0q1x3/$IMAGE_REPO_NAME:$IMAGE_VERSION"
+version: 0.2
