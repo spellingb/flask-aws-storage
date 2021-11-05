@@ -24,8 +24,8 @@ def upload():
         f.save(os.path.join(UPLOAD_FOLDER, secure_filename(f.filename)))
         upload_file(f"uploads/{f.filename}", BUCKET)
         return render_template('index.html')
-@app.route('/verify')
-def verify():
+@app.route('/bucket')
+def bucket():
         return '<p>' + BUCKET + '</p>'
 
 if __name__ == '__main__':
