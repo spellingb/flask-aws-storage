@@ -5,7 +5,8 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
-BUCKET = os.getenv('BUCKET_NAME')       
+BUCKET = os.getenv('BUCKET_NAME')
+PACMAN = os.getenv('PACMAN_URL')
 
 @app.route("/")
 def home():
@@ -30,4 +31,8 @@ def bucket():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
+@app.route("/pacman")
+def pacman():
+    return render_template('pacman.html', pacman_url=PACMAN)
     
